@@ -4,9 +4,16 @@ pipeline {
             label 'AGENT-1'
         }
     }
+    parameters {
+
+        action(name: 'action', choices: ['alply', 'destroy'])
+
+        
+    }
     options {
         timeout(time: 1, unit : 'HOURS')
         disableConcurrentBuilds()
+        ansiColor('xterm')
         
     }
     stages{
@@ -28,6 +35,12 @@ pipeline {
         }
 
     stage('Apply') {
+            when {
+            expression{
+                params.action== 'apply'
+
+            }
+        }
         input {
             message "Should we continue?"
             ok "Yes, we should."
@@ -36,6 +49,25 @@ pipeline {
                 sh """
                   cd 01-vpc
                   terraform apply -auto-approve
+                """
+            }
+        }
+    stage('Destroy') {
+        when {
+            expression{
+                params.action== 'destroy'
+
+            }
+        }
+
+        input {
+            message "Should we continue?"
+            ok "Yes, we should."
+        }
+            steps {
+                sh """
+                  cd 01-vpc
+                  terraform destroy -auto-approve
                 """
             }
         }
