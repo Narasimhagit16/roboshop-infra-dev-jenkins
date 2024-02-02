@@ -9,6 +9,7 @@ pipeline {
         disableConcurrentBuilds()
         
     }
+    stages{
     stage('Init') {
             steps {
                 sh """
@@ -39,8 +40,6 @@ pipeline {
                 """
             }
         }
-
-
     }
     post { 
         always { 
