@@ -6,7 +6,7 @@ pipeline {
     }
     parameters {
 
-        action(name: 'action', choices: ['alply', 'destroy'])
+        choice(name: 'action', choices: ['alply', 'destroy'])
 
         
     }
@@ -55,7 +55,7 @@ pipeline {
     stage('Destroy') {
         when {
             expression{
-                params.action== 'destroy'
+                params.action == 'destroy'
 
             }
         }
