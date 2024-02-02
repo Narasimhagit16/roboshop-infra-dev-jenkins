@@ -1,0 +1,50 @@
+pipeline {
+    agent {
+        node {
+            label 'AGENT-1'
+        }
+    }
+    options {
+        timeout(time: 1, unit : 'HOURS')
+        disableConcurrentBuilds()
+        
+    }
+    stage('Init') {
+            steps {
+                sh """
+                  cd 01-vpc
+                  terraform init
+                """
+            }
+        }
+    stage('Plan') {
+            steps {
+                sh """
+                  cd 01-vpc
+                  terraform plan
+                """
+            }
+        }
+    stage('Apply') {
+            steps {
+                sh """
+                  cd 01-vpc
+                  terraform apply -auto-approve
+                """
+            }
+        }
+
+
+    }
+    post { 
+        always { 
+            echo 'I will always say Hello again Narasimha!'
+        }
+        failure { 
+            echo 'Pipeline failed!'
+        }
+        success { 
+            echo 'I will always say when success'
+        } 
+    }
+ }
